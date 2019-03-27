@@ -1,0 +1,14 @@
+HandleMetric invoked with:
+  Adapter config: &Params{FilePath:out.txt,}
+  Instances: 'i1metric.instance.istio-system':
+  {
+		Value = 1235
+		Dimensions = map[response_code:200]
+  }
+HandleMetric invoked with:
+  Adapter config: &Params{FilePath:out.txt,}
+  Instances: 'i1metric.instance.istio-system':
+  {
+		Value = 9999999999
+		Dimensions = map[response_code:200]
+  }
