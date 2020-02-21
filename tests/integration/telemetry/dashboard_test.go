@@ -172,6 +172,7 @@ var (
 		"$workload", ".*",
 		"$dstsvc", ".*",
 		"$adapter", ".*",
+		"$csp", "mutual_tls",
 		// Just allow all mTLS settings rather than trying to send mtls and plaintext
 		`connection_security_policy="unknown"`, `connection_security_policy=~".*"`,
 		`connection_security_policy="mutual_tls"`, `connection_security_policy=~".*"`,
