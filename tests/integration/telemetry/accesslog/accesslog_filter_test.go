@@ -30,8 +30,6 @@ import (
 	"istio.io/istio/pkg/test/framework/components/prometheus"
 	"istio.io/istio/pkg/test/framework/label"
 	"istio.io/istio/pkg/test/framework/resource"
-	"istio.io/istio/pkg/test/util/file"
-	"istio.io/istio/pkg/test/util/retry"
 	util "istio.io/istio/tests/integration/mixer"
 )
 
@@ -55,11 +53,14 @@ func TestAccessLog(t *testing.T) { // nolint:interfacer
 		Run(func(ctx framework.TestContext) {
 			addr := ing.HTTPAddress()
 			url := fmt.Sprintf("http://%s/productpage", addr.String())
+			t.Logf("url: %v", url)
+			t.Logf("url: %v", url)
+			t.Logf("url: %v", url)
 
 			util.AllowRuleSync(t)
 
 			util.AllowRuleSync(t)
-			systemNM := namespace.ClaimSystemNamespaceOrFail(ctx, ctx)
+			/*systemNM := namespace.ClaimSystemNamespaceOrFail(ctx, ctx)
 			acc, err := file.AsString(accesslogConfig)
 			if err != nil {
 				t.Errorf("unable to load config %s, err:%v", accesslogConfig, err)
@@ -92,9 +93,9 @@ func TestAccessLog(t *testing.T) { // nolint:interfacer
 			retry.UntilSuccessOrFail(t, func() error {
 				util.SendTraffic(ing, t, "Sending traffic", url, "", 200)
 				return nil
-			}, retry.Delay(3*time.Second), retry.Timeout(80*time.Second))
+			}, retry.Delay(3*time.Second), retry.Timeout(80*time.Second))*/
 
-			time.Sleep(time.Minute * 30)
+			time.Sleep(time.Minute * 240)
 		})
 }
 
