@@ -19,6 +19,7 @@ import (
 	"istio.io/istio/pkg/test/framework/resource"
 	"istio.io/istio/pkg/test/framework/resource/environment"
 
+	cloudtracev1 "google.golang.org/genproto/googleapis/devtools/cloudtrace/v1"
 	loggingpb "google.golang.org/genproto/googleapis/logging/v2"
 	monitoringpb "google.golang.org/genproto/googleapis/monitoring/v3"
 )
@@ -29,6 +30,7 @@ type Instance interface {
 	GetStackdriverNamespace() string
 	ListTimeSeries() ([]*monitoringpb.TimeSeries, error)
 	ListLogEntries() ([]*loggingpb.LogEntry, error)
+	ListTraces() ([]*cloudtracev1.Trace, error)
 }
 
 type Config struct {

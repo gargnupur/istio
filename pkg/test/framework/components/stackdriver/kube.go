@@ -28,6 +28,7 @@ import (
 	testKube "istio.io/istio/pkg/test/kube"
 	"istio.io/istio/pkg/test/scopes"
 
+	cloudtrace "google.golang.org/genproto/googleapis/devtools/cloudtrace/v1"
 	jsonpb "github.com/golang/protobuf/jsonpb"
 	ltype "google.golang.org/genproto/googleapis/logging/type"
 	loggingpb "google.golang.org/genproto/googleapis/logging/v2"
@@ -49,6 +50,7 @@ type kubeComponent struct {
 	ns        namespace.Instance
 	forwarder istioKube.PortForwarder
 	cluster   resource.Cluster
+	ctx         resource.Context
 }
 
 func newKube(ctx resource.Context, cfg Config) (Instance, error) {
@@ -97,7 +99,7 @@ func newKube(ctx resource.Context, cfg Config) (Instance, error) {
 	}
 	c.forwarder = forwarder
 	scopes.Framework.Debugf("initialized stackdriver port forwarder: %v", forwarder.Address())
-
+	c.ctx = ctx
 	return c, nil
 }
 
@@ -164,6 +166,41 @@ func (c *kubeComponent) ListLogEntries() ([]*loggingpb.LogEntry, error) {
 	}
 	return ret, nil
 }
+
+func (c *kubeComponent) ListTraces() ([]*cloudtrace.Trace, error) {
+	client := http.Client{
+		Timeout: 5 * time.Second,
+	}
+
+	req := cloudtrace.ListTracesRequest {
+		page_size: 100,
+		Parent: "projects/test-project",
+		Filter: "root:server",
+		StartTime: time.Now().Add(-5 * time.Minute).Format(time.RFC3339),
+		EndTime: time.Now().Add(time.Minute).Format(time.RFC3339),
+	}
+
+	resp, err := client.Post("http://" + c.forwarder.Address() + "/traces","",req.toString())
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	r := cloudtrace.ListTracesResponse{}
+
+	err = jsonpb.UnmarshalString(string(body), &r)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.traces , nil
+}
+
 
 func (c *kubeComponent) ID() resource.ID {
 	return c.id
