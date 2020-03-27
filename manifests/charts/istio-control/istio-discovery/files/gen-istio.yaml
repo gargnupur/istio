@@ -1665,6 +1665,8 @@ spec:
                       inline_string: "envoy.wasm.stats"
 ---
 
+
+
 ---
 # Source: istio-discovery/templates/mutatingwebhook.yaml
 # Installed for each revision - not installed for cluster resources ( cluster roles, bindings, crds)

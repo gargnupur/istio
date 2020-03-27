@@ -23,6 +23,7 @@ import (
 
 	"istio.io/istio/pkg/config/labels"
 	"istio.io/istio/pkg/config/xds"
+	//"istio.io/pkg/log"
 )
 
 // EnvoyFilterWrapper is a wrapper for the EnvoyFilter api object with pre-processed data
@@ -73,6 +74,7 @@ func convertToEnvoyFilterWrapper(local *Config) *EnvoyFilterWrapper {
 			Match:     cp.Match,
 			Operation: cp.Patch.Operation,
 		}
+		log.Infof("Reached here ApplyTo: %v, Match %v, Patch: %v", cp.ApplyTo, cp.Match, cp.Patch)
 		// there won't be an error here because validation catches mismatched types
 		cpw.Value, _ = xds.BuildXDSObjectFromStruct(cp.ApplyTo, cp.Patch.Value)
 		if cp.Match == nil {

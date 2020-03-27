@@ -1393,6 +1393,7 @@ func (ps *PushContext) initAuthorizationPolicies(env *Environment) error {
 func (ps *PushContext) initEnvoyFilters(env *Environment) error {
 	envoyFilterConfigs, err := env.List(collections.IstioNetworkingV1Alpha3Envoyfilters.Resource().GroupVersionKind(), NamespaceAll)
 	if err != nil {
+		log.Infof("Reached here Err: %v", err)
 		return err
 	}
 
@@ -1400,6 +1401,7 @@ func (ps *PushContext) initEnvoyFilters(env *Environment) error {
 
 	ps.envoyFiltersByNamespace = make(map[string][]*EnvoyFilterWrapper)
 	for _, envoyFilterConfig := range envoyFilterConfigs {
+		log.Infof("Reached here Config: %v", envoyFilterConfig.Name)
 		efw := convertToEnvoyFilterWrapper(&envoyFilterConfig)
 		if _, exists := ps.envoyFiltersByNamespace[envoyFilterConfig.Namespace]; !exists {
 			ps.envoyFiltersByNamespace[envoyFilterConfig.Namespace] = make([]*EnvoyFilterWrapper, 0)
