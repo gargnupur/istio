@@ -514,11 +514,13 @@ spec:
             type_url: type.googleapis.com/envoy.config.filter.http.wasm.v2.Wasm
             value:
               config:
+                root_id: access_log_inbound
                 configuration: |
                   {
                     "log_window_duration": {{ .Values.telemetry.v2.accessLog.logWindowDuration }},
                   }
                 vm_config:
+                  vm_id: access_log_inbound
                   runtime: envoy.wasm.runtime.null
                   code:
                     local: { inline_string: "envoy.wasm.access_log_policy" }
